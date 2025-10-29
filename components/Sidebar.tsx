@@ -1,18 +1,13 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 export default function Sidebar() {
      const pathname = usePathname();
-
-     const isActive = (path: string) => {
-          return pathname === path;
-     };
-
-     const isParentActive = (items: { href: string; label: string }[]) => {
-          return items.some((item) => pathname === item.href);
-     };
+     const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
 
      const navItems = [
           { href: "/docs", label: "Getting Started" },
@@ -21,18 +16,13 @@ export default function Sidebar() {
      ];
 
      const apiItems = [
-          { href: "/docs/api/core", label: "Core Engine" },
-          { href: "/docs/api/shapes", label: "Shape Management" },
-          { href: "/docs/api/rendering", label: "Rendering" },
-          { href: "/docs/api/map", label: "Map Engine" },
-          { href: "/docs/api/isometric", label: "3D Isometric" },
+          { href: "/docs/api/map-tile-manager", label: "MapTileManager" }, //DONE
      ];
 
      const featuresItems = [
-          { href: "/docs/features/rendering", label: "Advanced Rendering" },
-          { href: "/docs/features/grid", label: "Architectural Grid" },
-          { href: "/docs/features/view", label: "View Controller" },
-          { href: "/docs/features/performance", label: "Performance" },
+          { href: "/docs/features/map-panning", label: "Map Panning" }, //DONE
+          { href: "/docs/features/map-zoom", label: "Map Zoom" }, //DONE
+          { href: "/docs/features/map-caching", label: "Map Caching" }, //DONE
      ];
 
      const examplesItems = [
@@ -62,6 +52,39 @@ export default function Sidebar() {
           { href: "/docs/examples", label: "Examples" },
      ];
 
+     const isActive = (path: string) => {
+          return pathname === path;
+     };
+
+     const isParentActive = (items: { href: string; label: string }[]) => {
+          return items.some((item) => pathname === item.href);
+     };
+
+     // Initialize open sections based on active path
+     useEffect(() => {
+          const sections: Record<string, boolean> = {};
+
+          if (isParentActive(apiItems)) sections["api"] = true;
+          if (isParentActive(featuresItems)) sections["features"] = true;
+          if (isParentActive(examplesItems)) sections["examples"] = true;
+          if (isParentActive(integrationItems)) sections["integration"] = true;
+          if (isParentActive(demoItems)) sections["demos"] = true;
+
+          setOpenSections(sections);
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+     }, [pathname]);
+
+     const toggleSection = (sectionKey: string) => {
+          setOpenSections((prev) => {
+               const newState: Record<string, boolean> = {};
+               // اگر section در حال باز است، ببندش، در غیر این صورت آن را باز کن و بقیه را ببند
+               if (!prev[sectionKey]) {
+                    newState[sectionKey] = true;
+               }
+               return newState;
+          });
+     };
+
      return (
           <aside className="w-64 bg-white shadow-lg h-full overflow-hidden">
                <div className="p-6 h-full flex flex-col">
@@ -83,87 +106,147 @@ export default function Sidebar() {
 
                          {/* API Reference Section */}
                          <div className="pt-4">
-                              <h3 className={`text-sm font-medium mb-2 ${isParentActive(apiItems) ? "text-blue-700" : "text-gray-900"}`}>API Reference</h3>
-                              {apiItems.map((item) => (
-                                   <Link
-                                        key={item.href}
-                                        href={item.href}
-                                        className={`block px-3 py-2 text-sm rounded-md transition-colors relative ${
-                                             isActive(item.href) ? "bg-blue-100 text-blue-700 font-medium" : "text-gray-600 hover:bg-gray-100"
-                                        }`}
-                                   >
-                                        {isActive(item.href) && <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 rounded-r"></div>}
-                                        {item.label}
-                                   </Link>
-                              ))}
+                              <button
+                                   onClick={() => toggleSection("api")}
+                                   className={`w-full flex items-center justify-between text-sm font-medium mb-2 px-3 py-2 rounded-md transition-colors ${
+                                        isParentActive(apiItems) ? "text-blue-700 hover:bg-blue-50" : "text-gray-900 hover:bg-gray-100"
+                                   }`}
+                              >
+                                   <span>API Reference</span>
+                                   {openSections["api"] ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                              </button>
+                              {openSections["api"] && (
+                                   <div className="ml-2 space-y-1">
+                                        {apiItems.map((item) => (
+                                             <Link
+                                                  key={item.href}
+                                                  href={item.href}
+                                                  className={`block px-3 py-2 text-sm rounded-md transition-colors relative ${
+                                                       isActive(item.href) ? "bg-blue-100 text-blue-700 font-medium" : "text-gray-600 hover:bg-gray-100"
+                                                  }`}
+                                             >
+                                                  {isActive(item.href) && <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 rounded-r"></div>}
+                                                  {item.label}
+                                             </Link>
+                                        ))}
+                                   </div>
+                              )}
                          </div>
 
                          {/* Features Section */}
                          <div className="pt-4">
-                              <h3 className={`text-sm font-medium mb-2 ${isParentActive(featuresItems) ? "text-blue-700" : "text-gray-900"}`}>Features</h3>
-                              {featuresItems.map((item) => (
-                                   <Link
-                                        key={item.href}
-                                        href={item.href}
-                                        className={`block px-3 py-2 text-sm rounded-md transition-colors relative ${
-                                             isActive(item.href) ? "bg-blue-100 text-blue-700 font-medium" : "text-gray-600 hover:bg-gray-100"
-                                        }`}
-                                   >
-                                        {isActive(item.href) && <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 rounded-r"></div>}
-                                        {item.label}
-                                   </Link>
-                              ))}
+                              <button
+                                   onClick={() => toggleSection("features")}
+                                   className={`w-full flex items-center justify-between text-sm font-medium mb-2 px-3 py-2 rounded-md transition-colors ${
+                                        isParentActive(featuresItems) ? "text-blue-700 hover:bg-blue-50" : "text-gray-900 hover:bg-gray-100"
+                                   }`}
+                              >
+                                   <span>Features</span>
+                                   {openSections["features"] ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                              </button>
+                              {openSections["features"] && (
+                                   <div className="ml-2 space-y-1">
+                                        {featuresItems.map((item) => (
+                                             <Link
+                                                  key={item.href}
+                                                  href={item.href}
+                                                  className={`block px-3 py-2 text-sm rounded-md transition-colors relative ${
+                                                       isActive(item.href) ? "bg-blue-100 text-blue-700 font-medium" : "text-gray-600 hover:bg-gray-100"
+                                                  }`}
+                                             >
+                                                  {isActive(item.href) && <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 rounded-r"></div>}
+                                                  {item.label}
+                                             </Link>
+                                        ))}
+                                   </div>
+                              )}
                          </div>
 
                          {/* Examples Section */}
                          <div className="pt-4">
-                              <h3 className={`text-sm font-medium mb-2 ${isParentActive(examplesItems) ? "text-blue-700" : "text-gray-900"}`}>Examples</h3>
-                              {examplesItems.map((item) => (
-                                   <Link
-                                        key={item.href}
-                                        href={item.href}
-                                        className={`block px-3 py-2 text-sm rounded-md transition-colors relative ${
-                                             isActive(item.href) ? "bg-blue-100 text-blue-700 font-medium" : "text-gray-600 hover:bg-gray-100"
-                                        }`}
-                                   >
-                                        {isActive(item.href) && <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 rounded-r"></div>}
-                                        {item.label}
-                                   </Link>
-                              ))}
+                              <button
+                                   onClick={() => toggleSection("examples")}
+                                   className={`w-full flex items-center justify-between text-sm font-medium mb-2 px-3 py-2 rounded-md transition-colors ${
+                                        isParentActive(examplesItems) ? "text-blue-700 hover:bg-blue-50" : "text-gray-900 hover:bg-gray-100"
+                                   }`}
+                              >
+                                   <span>Examples</span>
+                                   {openSections["examples"] ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                              </button>
+                              {openSections["examples"] && (
+                                   <div className="ml-2 space-y-1">
+                                        {examplesItems.map((item) => (
+                                             <Link
+                                                  key={item.href}
+                                                  href={item.href}
+                                                  className={`block px-3 py-2 text-sm rounded-md transition-colors relative ${
+                                                       isActive(item.href) ? "bg-blue-100 text-blue-700 font-medium" : "text-gray-600 hover:bg-gray-100"
+                                                  }`}
+                                             >
+                                                  {isActive(item.href) && <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 rounded-r"></div>}
+                                                  {item.label}
+                                             </Link>
+                                        ))}
+                                   </div>
+                              )}
                          </div>
 
                          {/* Integration Section */}
                          <div className="pt-4">
-                              <h3 className={`text-sm font-medium mb-2 ${isParentActive(integrationItems) ? "text-blue-700" : "text-gray-900"}`}>Integration</h3>
-                              {integrationItems.map((item) => (
-                                   <Link
-                                        key={item.href}
-                                        href={item.href}
-                                        className={`block px-3 py-2 text-sm rounded-md transition-colors relative ${
-                                             isActive(item.href) ? "bg-blue-100 text-blue-700 font-medium" : "text-gray-600 hover:bg-gray-100"
-                                        }`}
-                                   >
-                                        {isActive(item.href) && <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 rounded-r"></div>}
-                                        {item.label}
-                                   </Link>
-                              ))}
+                              <button
+                                   onClick={() => toggleSection("integration")}
+                                   className={`w-full flex items-center justify-between text-sm font-medium mb-2 px-3 py-2 rounded-md transition-colors ${
+                                        isParentActive(integrationItems) ? "text-blue-700 hover:bg-blue-50" : "text-gray-900 hover:bg-gray-100"
+                                   }`}
+                              >
+                                   <span>Integration</span>
+                                   {openSections["integration"] ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                              </button>
+                              {openSections["integration"] && (
+                                   <div className="ml-2 space-y-1">
+                                        {integrationItems.map((item) => (
+                                             <Link
+                                                  key={item.href}
+                                                  href={item.href}
+                                                  className={`block px-3 py-2 text-sm rounded-md transition-colors relative ${
+                                                       isActive(item.href) ? "bg-blue-100 text-blue-700 font-medium" : "text-gray-600 hover:bg-gray-100"
+                                                  }`}
+                                             >
+                                                  {isActive(item.href) && <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 rounded-r"></div>}
+                                                  {item.label}
+                                             </Link>
+                                        ))}
+                                   </div>
+                              )}
                          </div>
 
                          {/* Demos Section */}
                          <div className="pt-4">
-                              <h3 className={`text-sm font-medium mb-2 ${isParentActive(demoItems) ? "text-blue-700" : "text-gray-900"}`}>Demos</h3>
-                              {demoItems.map((item) => (
-                                   <Link
-                                        key={item.href}
-                                        href={item.href}
-                                        className={`block px-3 py-2 text-sm rounded-md transition-colors relative ${
-                                             isActive(item.href) ? "bg-blue-100 text-blue-700 font-medium" : "text-gray-600 hover:bg-gray-100"
-                                        }`}
-                                   >
-                                        {isActive(item.href) && <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 rounded-r"></div>}
-                                        {item.label}
-                                   </Link>
-                              ))}
+                              <button
+                                   onClick={() => toggleSection("demos")}
+                                   className={`w-full flex items-center justify-between text-sm font-medium mb-2 px-3 py-2 rounded-md transition-colors ${
+                                        isParentActive(demoItems) ? "text-blue-700 hover:bg-blue-50" : "text-gray-900 hover:bg-gray-100"
+                                   }`}
+                              >
+                                   <span>Demos</span>
+                                   {openSections["demos"] ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                              </button>
+                              {openSections["demos"] && (
+                                   <div className="ml-2 space-y-1">
+                                        {demoItems.map((item) => (
+                                             <Link
+                                                  key={item.href}
+                                                  href={item.href}
+                                                  className={`block px-3 py-2 text-sm rounded-md transition-colors relative ${
+                                                       isActive(item.href) ? "bg-blue-100 text-blue-700 font-medium" : "text-gray-600 hover:bg-gray-100"
+                                                  }`}
+                                             >
+                                                  {isActive(item.href) && <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 rounded-r"></div>}
+                                                  {item.label}
+                                             </Link>
+                                        ))}
+                                   </div>
+                              )}
                          </div>
                     </nav>
                </div>

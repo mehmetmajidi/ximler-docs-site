@@ -109,6 +109,11 @@ export default function DocumentationPage() {
                                    <p className="text-gray-600 mb-4">Geographic and coordinate systems</p>
                                    <span className="text-green-600 hover:text-green-700 font-medium">Read More →</span>
                               </Link>
+                              <Link href="/docs/api/map-tile-manager" className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
+                                   <h3 className="text-lg font-semibold text-gray-900 mb-2">MapTileManager</h3>
+                                   <p className="text-gray-600 mb-4">Tile loading, caching, and management</p>
+                                   <span className="text-green-600 hover:text-green-700 font-medium">Read More →</span>
+                              </Link>
                               <Link href="/docs/api/isometric" className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
                                    <h3 className="text-lg font-semibold text-gray-900 mb-2">3D Isometric</h3>
                                    <p className="text-gray-600 mb-4">2.5D visualization and rendering</p>
@@ -133,25 +138,20 @@ export default function DocumentationPage() {
                                    View All →
                               </Link>
                          </div>
-                         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                              <Link href="/docs/features/rendering" className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
-                                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Advanced Rendering</h3>
-                                   <p className="text-gray-600 mb-4">Gradients, patterns, and effects</p>
+                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                              <Link href="/docs/features/map-panning" className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
+                                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Map Panning</h3>
+                                   <p className="text-gray-600 mb-4">Interactive map navigation</p>
                                    <span className="text-yellow-600 hover:text-yellow-700 font-medium">Read More →</span>
                               </Link>
-                              <Link href="/docs/features/grid" className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
-                                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Architectural Grid</h3>
-                                   <p className="text-gray-600 mb-4">Professional grid systems</p>
+                              <Link href="/docs/features/map-zoom" className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
+                                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Map Zoom</h3>
+                                   <p className="text-gray-600 mb-4">Mouse wheel and programmatic zoom control</p>
                                    <span className="text-yellow-600 hover:text-yellow-700 font-medium">Read More →</span>
                               </Link>
-                              <Link href="/docs/features/view" className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
-                                   <h3 className="text-lg font-semibold text-gray-900 mb-2">View Controller</h3>
-                                   <p className="text-gray-600 mb-4">Camera and view management</p>
-                                   <span className="text-yellow-600 hover:text-yellow-700 font-medium">Read More →</span>
-                              </Link>
-                              <Link href="/docs/features/performance" className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
-                                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Performance</h3>
-                                   <p className="text-gray-600 mb-4">Optimization and best practices</p>
+                              <Link href="/docs/features/map-caching" className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
+                                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Map Caching</h3>
+                                   <p className="text-gray-600 mb-4">Dual-layer tile caching system</p>
                                    <span className="text-yellow-600 hover:text-yellow-700 font-medium">Read More →</span>
                               </Link>
                          </div>

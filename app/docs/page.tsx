@@ -154,6 +154,11 @@ export default function DocumentationPage() {
                                    <p className="text-gray-600 mb-4">Dual-layer tile caching system</p>
                                    <span className="text-yellow-600 hover:text-yellow-700 font-medium">Read More →</span>
                               </Link>
+                              <Link href="/docs/features/map-geocoding" className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
+                                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Map Geocoding</h3>
+                                   <p className="text-gray-600 mb-4">Search locations by name</p>
+                                   <span className="text-yellow-600 hover:text-yellow-700 font-medium">Read More →</span>
+                              </Link>
                          </div>
                     </div>
                </div>

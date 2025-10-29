@@ -23,6 +23,7 @@ export default function Sidebar() {
           { href: "/docs/features/map-panning", label: "Map Panning" }, //DONE
           { href: "/docs/features/map-zoom", label: "Map Zoom" }, //DONE
           { href: "/docs/features/map-caching", label: "Map Caching" }, //DONE
+          { href: "/docs/features/map-geocoding", label: "Map Geocoding" },
      ];
 
      const examplesItems = [
